@@ -24,6 +24,9 @@ class NewTransaction extends StatelessWidget {
               controller: titleController,
             ),
             TextField(
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 labelText: 'Amount',
               ),
@@ -33,7 +36,8 @@ class NewTransaction extends StatelessWidget {
               child: Text('Add transaction'),
               textColor: Colors.purple,
               onPressed: () {
-                addNewTransaction(titleController.text, double.parse(amountController.text));
+                addNewTransaction(
+                    titleController.text, double.parse(amountController.text));
               },
             ),
           ],
