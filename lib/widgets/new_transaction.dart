@@ -74,10 +74,12 @@ class _NewTransactionState extends State<NewTransaction> {
               height: 70,
               child: Row(
                 children: <Widget>[
-                  Text(
-                    _selectedDate == null
-                        ? 'No date chosen!'
-                        : 'Picked Date: ${DateFormat.yMMMd().format(_selectedDate)}',
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'No date chosen!'
+                          : 'Picked Date: ${DateFormat.yMMMd().format(_selectedDate)}',
+                    ),
                   ),
                   FlatButton(
                     textColor: Theme.of(context).primaryColor,
