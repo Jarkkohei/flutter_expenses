@@ -117,32 +117,48 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _buildLandscapeContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text('Show chart'),
-        Switch.adaptive(
-          activeColor: Theme.of(context).accentColor,
-          value: _showChart,
-          onChanged: (val) {
-            setState(() {
-              _showChart = val;
-            });
-          },
-        ),
-      ],
-    );
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text('Show chart'),
+          Switch.adaptive(
+            activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(_userTransactions),
+            )
+          : txListWidget
+    ];
   }
 
-  Widget _buildPortraitContent(MediaQueryData mediaQuery, AppBar appBar) {
-    return Container(
-      height: (mediaQuery.size.height -
-              appBar.preferredSize.height -
-              mediaQuery.padding.top) *
-          0.3,
-      child: Chart(_userTransactions),
-    );
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, txListWidget) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_userTransactions),
+      ),
+      txListWidget
+    ];
   }
 
   @override
@@ -187,19 +203,10 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandscape) _buildLandscapeContent(),
-            if (!isLandscape) _buildPortraitContent(mediaQuery, appBar),
-            if (!isLandscape) txListWidget,
             if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_userTransactions),
-                    )
-                  : txListWidget,
+              ..._buildLandscapeContent(mediaQuery, appBar, txListWidget),
+            if (!isLandscape)
+              ..._buildPortraitContent(mediaQuery, appBar, txListWidget),
           ],
         ),
       ),
